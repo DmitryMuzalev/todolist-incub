@@ -1,15 +1,12 @@
 import "./App.css";
-import { ChangeEvent, useState } from "react";
-import { TodoList } from "./TodoList";
+
 import { v1 } from "uuid";
 
-export type Task = {
-  id: string;
-  title: string;
-  isDone: boolean;
-};
+import { useState } from "react";
 
-export type Filter = "all" | "active" | "completed";
+import { Filter, Task } from "./types";
+
+import { TodoList } from "./TodoList";
 
 const initialState: Task[] = [
   { id: v1(), title: "HTML&CSS", isDone: true },
@@ -23,27 +20,21 @@ const initialState: Task[] = [
 function App() {
   const [tasks, setTasks] = useState<Task[]>(initialState);
   const [filter, setFilter] = useState<Filter>("all");
-  const [taskTitle, setTaskTitle] = useState<string>("");
 
-  const removeTaskHandler = (id: string) => {
+  const removeTask = (id: string) => {
     setTasks(tasks.filter((t) => t.id !== id));
   };
 
-  const addTaskHandler = () => {
+  const addTask = (title: string) => {
     const newTask: Task = {
       id: v1(),
       isDone: false,
-      title: taskTitle,
+      title,
     };
     setTasks([newTask, ...tasks]);
-    setTaskTitle("");
   };
 
-  const changeFilterHandler = (value: Filter) => setFilter(value);
-
-  const changeTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setTaskTitle(e.currentTarget.value);
-  };
+  const changeFilter = (filter: Filter) => setFilter(filter);
 
   let list = tasks;
 
@@ -60,11 +51,9 @@ function App() {
       <TodoList
         title="What to learn"
         tasks={list}
-        removeTask={removeTaskHandler}
-        addTask={addTaskHandler}
-        changeFilter={changeFilterHandler}
-        changeTaskTitle={changeTaskTitleHandler}
-        taskTitle={taskTitle}
+        removeTask={removeTask}
+        addTask={addTask}
+        changeFilter={changeFilter}
       />
     </div>
   );

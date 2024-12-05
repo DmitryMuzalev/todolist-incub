@@ -1,32 +1,51 @@
-import { ChangeEvent, FC } from "react";
-import { Filter, Task } from "./App";
-import { Button } from "./Button";
+import { FC, useState, ChangeEvent, KeyboardEvent } from "react";
+import { Button } from "./components/Button";
+import { Filter, Task } from "./types";
 
 type Props = {
   title: string;
   tasks: Task[];
-  taskTitle: string;
+  addTask: (title: string) => void;
   removeTask: (id: string) => void;
-  addTask: () => void;
-  changeFilter: (value: Filter) => void;
-  changeTaskTitle: (event: ChangeEvent<HTMLInputElement>) => void;
+  changeFilter: (filter: Filter) => void;
 };
 
 const TodoList: FC<Props> = ({
   title,
   tasks,
-  taskTitle,
-  removeTask,
   addTask,
+  removeTask,
   changeFilter,
-  changeTaskTitle,
 }) => {
+  const [taskTitle, setTaskTitle] = useState<string>("");
+
+  const addTaskHandler = () => {
+    if (taskTitle.trim()) {
+      addTask(taskTitle);
+      setTaskTitle("");
+    }
+  };
+  const addTaskOnKeyHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") addTaskHandler();
+  };
+
+  const removeTaskHandler = (taskId: string) => removeTask(taskId);
+
+  const changeTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setTaskTitle(e.currentTarget.value);
+  };
+  const changeFilterHandler = (filter: Filter) => changeFilter(filter);
+
   return (
     <div>
       <h3>{title}</h3>
       <div>
-        <input onChange={changeTaskTitle} value={taskTitle} />
-        <Button cb={() => addTask()} title="+" />
+        <input
+          onChange={changeTaskTitleHandler}
+          onKeyDown={addTaskOnKeyHandler}
+          value={taskTitle}
+        />
+        <Button onClick={addTaskHandler} title="+" />
       </div>
 
       {!tasks.length ? (
@@ -38,7 +57,7 @@ const TodoList: FC<Props> = ({
               <li key={task.id}>
                 <input type="checkbox" checked={task.isDone} />
                 <span>{task.title}</span>
-                <button onClick={() => removeTask(task.id)}>x</button>
+                <Button onClick={() => removeTaskHandler(task.id)} title="x" />
               </li>
             );
           })}
@@ -46,9 +65,12 @@ const TodoList: FC<Props> = ({
       )}
 
       <div>
-        <Button cb={() => changeFilter("all")} title="All" />
-        <Button cb={() => changeFilter("active")} title="Active" />
-        <Button cb={() => changeFilter("completed")} title="Completed" />
+        <Button title="All" onClick={() => changeFilterHandler("all")} />
+        <Button title="Active" onClick={() => changeFilterHandler("active")} />
+        <Button
+          title="Completed"
+          onClick={() => changeFilterHandler("completed")}
+        />
       </div>
     </div>
   );
