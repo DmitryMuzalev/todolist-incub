@@ -5,27 +5,36 @@ import { Filter, Task } from "./types";
 type Props = {
   title: string;
   tasks: Task[];
+  filter: string;
   addTask: (title: string) => void;
   removeTask: (id: string) => void;
   changeFilter: (filter: Filter) => void;
+  changeTaskStatus: (id: string) => void;
 };
 
 const TodoList: FC<Props> = ({
   title,
   tasks,
+  filter,
   addTask,
   removeTask,
   changeFilter,
+  changeTaskStatus,
 }) => {
   const [taskTitle, setTaskTitle] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   const addTaskHandler = () => {
-    if (taskTitle.trim()) {
-      addTask(taskTitle);
+    const newTask = taskTitle.trim();
+    if (newTask) {
+      addTask(newTask);
       setTaskTitle("");
+    } else {
+      setError("Title is required");
     }
   };
   const addTaskOnKeyHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    setError(null);
     if (e.key === "Enter") addTaskHandler();
   };
 
@@ -36,6 +45,8 @@ const TodoList: FC<Props> = ({
   };
   const changeFilterHandler = (filter: Filter) => changeFilter(filter);
 
+  const changeTaskStatusHandler = (id: string) => changeTaskStatus(id);
+
   return (
     <div>
       <h3>{title}</h3>
@@ -44,8 +55,10 @@ const TodoList: FC<Props> = ({
           onChange={changeTaskTitleHandler}
           onKeyDown={addTaskOnKeyHandler}
           value={taskTitle}
+          className={error ? "error" : ""}
         />
         <Button onClick={addTaskHandler} title="+" />
+        {error && <div className="error-message">{error}</div>}
       </div>
 
       {!tasks.length ? (
@@ -54,8 +67,12 @@ const TodoList: FC<Props> = ({
         <ul>
           {tasks.map((task) => {
             return (
-              <li key={task.id}>
-                <input type="checkbox" checked={task.isDone} />
+              <li key={task.id} className={task.isDone ? "is-done" : ""}>
+                <input
+                  type="checkbox"
+                  checked={task.isDone}
+                  onChange={() => changeTaskStatusHandler(task.id)}
+                />
                 <span>{task.title}</span>
                 <Button onClick={() => removeTaskHandler(task.id)} title="x" />
               </li>
@@ -65,9 +82,18 @@ const TodoList: FC<Props> = ({
       )}
 
       <div>
-        <Button title="All" onClick={() => changeFilterHandler("all")} />
-        <Button title="Active" onClick={() => changeFilterHandler("active")} />
         <Button
+          className={filter === "all" ? "active-filter" : ""}
+          title="All"
+          onClick={() => changeFilterHandler("all")}
+        />
+        <Button
+          className={filter === "active" ? "active-filter" : ""}
+          title="Active"
+          onClick={() => changeFilterHandler("active")}
+        />
+        <Button
+          className={filter === "completed" ? "active-filter" : ""}
           title="Completed"
           onClick={() => changeFilterHandler("completed")}
         />

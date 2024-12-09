@@ -1,14 +1,9 @@
-import { FC } from "react";
+import { ButtonHTMLAttributes, FC } from "react";
 
-type ButtonProps = {
-  title: string;
-  onClick: () => void;
-};
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-const Button: FC<ButtonProps> = ({ title, onClick }) => {
-  const clickHandler = () => onClick();
-
-  return <button onClick={clickHandler}>{title}</button>;
+const Button: FC<ButtonProps> = ({ title, ...props }) => {
+  return <button {...props}>{title}</button>;
 };
 
 export { Button };

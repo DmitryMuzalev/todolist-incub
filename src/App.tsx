@@ -36,6 +36,14 @@ function App() {
 
   const changeFilter = (filter: Filter) => setFilter(filter);
 
+  const changeTaskStatus = (id: string) => {
+    const updateTasks = tasks.map((t) => {
+      return t.id === id ? { ...t, isDone: !t.isDone } : t;
+    });
+
+    setTasks(updateTasks);
+  };
+
   let list = tasks;
 
   if (filter === "completed") {
@@ -51,9 +59,11 @@ function App() {
       <TodoList
         title="What to learn"
         tasks={list}
+        filter={filter}
         removeTask={removeTask}
         addTask={addTask}
         changeFilter={changeFilter}
+        changeTaskStatus={changeTaskStatus}
       />
     </div>
   );
