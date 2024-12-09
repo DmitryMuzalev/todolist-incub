@@ -5,7 +5,7 @@ import { Filter, Task } from "./types";
 type Props = {
   title: string;
   tasks: Task[];
-  filter: string;
+  filter: Filter;
   addTask: (title: string) => void;
   removeTask: (id: string) => void;
   changeFilter: (filter: Filter) => void;
