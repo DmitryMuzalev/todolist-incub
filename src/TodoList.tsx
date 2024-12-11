@@ -1,18 +1,21 @@
 import { FC, useState, ChangeEvent, KeyboardEvent } from "react";
 import { Button } from "./components/Button";
-import { Filter, Task } from "./types";
+import { FilterType, TaskType } from "./types";
 
 type Props = {
+  todoListId: string;
   title: string;
-  tasks: Task[];
-  filter: Filter;
-  addTask: (title: string) => void;
-  removeTask: (id: string) => void;
-  changeFilter: (filter: Filter) => void;
-  changeTaskStatus: (id: string) => void;
+  tasks: TaskType[];
+  filter: FilterType;
+  addTask: (todoListId: string, title: string) => void;
+  removeTask: (todoListId: string, taskId: string) => void;
+  changeFilter: (todoListId: string, filter: FilterType) => void;
+  changeTaskStatus: (todoListId: string, taskId: string) => void;
+  removeTodoList: (todoListId: string) => void;
 };
 
 const TodoList: FC<Props> = ({
+  todoListId,
   title,
   tasks,
   filter,
@@ -20,6 +23,7 @@ const TodoList: FC<Props> = ({
   removeTask,
   changeFilter,
   changeTaskStatus,
+  removeTodoList,
 }) => {
   const [taskTitle, setTaskTitle] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +31,7 @@ const TodoList: FC<Props> = ({
   const addTaskHandler = () => {
     const newTask = taskTitle.trim();
     if (newTask) {
-      addTask(newTask);
+      addTask(todoListId, newTask);
       setTaskTitle("");
     } else {
       setError("Title is required");
@@ -38,18 +42,27 @@ const TodoList: FC<Props> = ({
     if (e.key === "Enter") addTaskHandler();
   };
 
-  const removeTaskHandler = (taskId: string) => removeTask(taskId);
+  const removeTaskHandler = (taskId: string) => removeTask(todoListId, taskId);
 
   const changeTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTaskTitle(e.currentTarget.value);
   };
-  const changeFilterHandler = (filter: Filter) => changeFilter(filter);
+  const changeFilterHandler = (filter: FilterType) =>
+    changeFilter(todoListId, filter);
 
-  const changeTaskStatusHandler = (id: string) => changeTaskStatus(id);
+  const changeTaskStatusHandler = (taskId: string) =>
+    changeTaskStatus(todoListId, taskId);
+
+  const removeTodoListHandler = () => {
+    removeTodoList(todoListId);
+  };
 
   return (
     <div>
-      <h3>{title}</h3>
+      <div className={"todolist-title-container"}>
+        <h3>{title}</h3>
+        <Button title="x" onClick={removeTodoListHandler} />
+      </div>
       <div>
         <input
           onChange={changeTaskTitleHandler}
