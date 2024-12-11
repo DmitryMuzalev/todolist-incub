@@ -10,4 +10,8 @@ export type TaskType = {
   isDone: boolean;
 };
 
+export type TasksStateType = {
+  [key: string]: TaskType[];
+};
+
 export type FilterType = "all" | "active" | "completed";

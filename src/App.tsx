@@ -4,30 +4,33 @@ import { v1 } from "uuid";
 
 import { useState } from "react";
 
-import { FilterType, TaskType, TodoListType } from "./types";
+import { FilterType, TasksStateType, TaskType, TodoListType } from "./types";
 
 import { TodoList } from "./TodoList";
 
 function App() {
+  const todoListID_1 = v1();
+  const todoListID_2 = v1();
+
   const [todoLists, setTodoLists] = useState<TodoListType[]>([
-    { id: v1(), title: "What to learn", filter: "all" },
-    { id: v1(), title: "What to buy", filter: "all" },
+    { id: todoListID_1, title: "What to learn", filter: "all" },
+    { id: todoListID_2, title: "What to buy", filter: "all" },
   ]);
 
-  const defaultTasks = {
-    [todoLists[0].id]: [
+  const defaultTasks: TasksStateType = {
+    [todoListID_1]: [
       { id: v1(), title: "HTML&CSS", isDone: true },
       { id: v1(), title: "JS", isDone: true },
       { id: v1(), title: "ReactJS", isDone: false },
     ],
-    [todoLists[1].id]: [
+    [todoListID_2]: [
       { id: v1(), title: "Redux", isDone: false },
       { id: v1(), title: "Typescript", isDone: false },
       { id: v1(), title: "RTK query", isDone: false },
     ],
   };
 
-  const [tasks, setTasks] = useState(defaultTasks);
+  const [tasks, setTasks] = useState<TasksStateType>(defaultTasks);
 
   const removeTask = (todoListId: string, taskId: string) => {
     setTasks({
@@ -64,6 +67,7 @@ function App() {
 
   const removeTodoList = (todoListId: string) => {
     setTodoLists(todoLists.filter((tl) => tl.id !== todoListId));
+
     delete tasks[todoListId];
     setTasks({ ...tasks });
   };
