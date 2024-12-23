@@ -1,5 +1,6 @@
+import { Button, Stack, TextField } from "@mui/material";
 import { FC, useState, ChangeEvent, KeyboardEvent } from "react";
-import { Button } from "./Button";
+import AddIcon from "@mui/icons-material/Add";
 
 type Props = {
   addItem: (title: string) => void;
@@ -29,16 +30,25 @@ const AddItemForm: FC<Props> = ({ addItem }) => {
   };
 
   return (
-    <div>
-      <input
+    <Stack direction="row" spacing={1}>
+      <TextField
+        variant="outlined"
+        size="small"
         onChange={changeTaskTitleHandler}
         onKeyDown={addTaskOnKeyHandler}
         value={title}
-        className={error ? "error" : ""}
+        error={!!error}
+        helperText={error}
       />
-      <Button onClick={addItemHandler} title="+" />
-      {error && <div className="error-message">{error}</div>}
-    </div>
+      <Button
+        onClick={addItemHandler}
+        variant="contained"
+        color="primary"
+        size="large"
+      >
+        <AddIcon />
+      </Button>
+    </Stack>
   );
 };
 

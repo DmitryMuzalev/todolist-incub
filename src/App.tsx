@@ -8,6 +8,7 @@ import { FilterType, TasksStateType, TaskType, TodoListType } from "./types";
 
 import { TodoList } from "./TodoList";
 import { AddItemForm } from "./components/AddItemForm";
+import { Container, Stack } from "@mui/material";
 
 function App() {
   const todoListID_1 = v1();
@@ -110,40 +111,42 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <div>
+    <Container className="App">
+      <Stack direction="column" spacing={7}>
         <AddItemForm addItem={addTodoList} />
-      </div>
 
-      {todoLists.map((tl) => {
-        let list = tasks[tl.id];
+        <Stack direction="row" gap={5} flexWrap="wrap">
+          {todoLists.map((tl) => {
+            let list = tasks[tl.id];
 
-        if (tl.filter === "completed") {
-          list = tasks[tl.id].filter((t) => t.isDone);
-        }
+            if (tl.filter === "completed") {
+              list = tasks[tl.id].filter((t) => t.isDone);
+            }
 
-        if (tl.filter === "active") {
-          list = tasks[tl.id].filter((t) => !t.isDone);
-        }
+            if (tl.filter === "active") {
+              list = tasks[tl.id].filter((t) => !t.isDone);
+            }
 
-        return (
-          <TodoList
-            key={tl.id}
-            todoListId={tl.id}
-            title={tl.title}
-            tasks={list}
-            filter={tl.filter}
-            removeTask={removeTask}
-            addTask={addTask}
-            changeFilter={changeFilter}
-            changeTaskStatus={changeTaskStatus}
-            removeTodoList={removeTodoList}
-            updateTaskTitle={updateTaskTitle}
-            updateTodoTitle={updateTodoTitle}
-          />
-        );
-      })}
-    </div>
+            return (
+              <TodoList
+                key={tl.id}
+                todoListId={tl.id}
+                title={tl.title}
+                tasks={list}
+                filter={tl.filter}
+                removeTask={removeTask}
+                addTask={addTask}
+                changeFilter={changeFilter}
+                changeTaskStatus={changeTaskStatus}
+                removeTodoList={removeTodoList}
+                updateTaskTitle={updateTaskTitle}
+                updateTodoTitle={updateTodoTitle}
+              />
+            );
+          })}
+        </Stack>
+      </Stack>
+    </Container>
   );
 }
 

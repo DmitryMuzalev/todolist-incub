@@ -1,8 +1,18 @@
 import { FC } from "react";
-import { Button } from "./components/Button";
 import { FilterType, TaskType } from "./types";
 import { AddItemForm } from "./components/AddItemForm";
 import { EditableSpan } from "./components/EditableSpan";
+import {
+  Box,
+  Button,
+  Checkbox,
+  IconButton,
+  List,
+  ListItem,
+  Stack,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 
 type Props = {
   todoListId: string;
@@ -59,58 +69,110 @@ const TodoList: FC<Props> = ({
   };
 
   return (
-    <div>
-      <div className={"todolist-title-container"}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        p: 2,
+        border: "1px solid black",
+        borderRadius: "8px",
+      }}
+    >
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        spacing={1}
+        marginBottom={2}
+        className={"todolist-title-container"}
+      >
         <h3>
           <EditableSpan value={title} onChange={updateTodoTitleHandler} />
         </h3>
-        <Button title="x" onClick={removeTodoListHandler} />
-      </div>
-      <AddItemForm addItem={addTaskHandler} />
+        <IconButton
+          aria-label="delete"
+          onClick={removeTodoListHandler}
+          size="large"
+          color="error"
+          disableRipple={true}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Stack>
 
-      {!tasks.length ? (
-        <p>Тасок нет</p>
-      ) : (
-        <ul>
-          {tasks.map((task) => {
-            return (
-              <li key={task.id} className={task.isDone ? "is-done" : ""}>
-                <input
-                  type="checkbox"
-                  checked={task.isDone}
-                  onChange={() => changeTaskStatusHandler(task.id)}
-                />
-                <EditableSpan
-                  value={task.title}
-                  onChange={(newTitle) =>
-                    updateTaskTitleHandler(newTitle, task.id)
-                  }
-                />
-                <Button onClick={() => removeTaskHandler(task.id)} title="x" />
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <Stack spacing={2} sx={{ flexGrow: 1 }}>
+        <AddItemForm addItem={addTaskHandler} />
 
-      <div>
-        <Button
-          className={filter === "all" ? "active-filter" : ""}
-          title="All"
-          onClick={() => changeFilterHandler("all")}
-        />
-        <Button
-          className={filter === "active" ? "active-filter" : ""}
-          title="Active"
-          onClick={() => changeFilterHandler("active")}
-        />
-        <Button
-          className={filter === "completed" ? "active-filter" : ""}
-          title="Completed"
-          onClick={() => changeFilterHandler("completed")}
-        />
-      </div>
-    </div>
+        <Box sx={{ flexGrow: 1 }}>
+          {!tasks.length ? (
+            <p
+              style={{
+                textAlign: "center",
+                fontSize: "18px",
+                fontWeight: "600",
+              }}
+            >
+              Тасок нет
+            </p>
+          ) : (
+            <List>
+              {tasks.map((task) => {
+                return (
+                  <ListItem
+                    key={task.id}
+                    className={task.isDone ? "is-done" : ""}
+                    sx={{ gap: "5px" }}
+                  >
+                    <Checkbox
+                      color="primary"
+                      checked={task.isDone}
+                      size="medium"
+                      onChange={() => changeTaskStatusHandler(task.id)}
+                    />
+                    <EditableSpan
+                      value={task.title}
+                      onChange={(newTitle) =>
+                        updateTaskTitleHandler(newTitle, task.id)
+                      }
+                    />
+                    <IconButton
+                      onClick={() => removeTaskHandler(task.id)}
+                      color="error"
+                    >
+                      <RemoveCircleOutlineOutlinedIcon />
+                    </IconButton>
+                  </ListItem>
+                );
+              })}
+            </List>
+          )}
+        </Box>
+
+        <Stack direction="row" spacing={0.5} justifyContent="center">
+          <Button
+            variant={filter === "all" ? "contained" : "outlined"}
+            size="small"
+            onClick={() => changeFilterHandler("all")}
+          >
+            All
+          </Button>
+          <Button
+            size="small"
+            variant={filter === "active" ? "contained" : "outlined"}
+            onClick={() => changeFilterHandler("active")}
+          >
+            Active
+          </Button>
+          <Button
+            size="small"
+            variant={filter === "completed" ? "contained" : "outlined"}
+            onClick={() => changeFilterHandler("completed")}
+          >
+            Completed
+          </Button>
+        </Stack>
+      </Stack>
+    </Box>
   );
 };
 export { TodoList };
