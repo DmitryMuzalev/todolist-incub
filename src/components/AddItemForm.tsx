@@ -30,7 +30,7 @@ const AddItemForm: FC<Props> = ({ addItem }) => {
   };
 
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack direction="row" spacing={1} alignItems="start">
       <TextField
         variant="outlined"
         size="small"

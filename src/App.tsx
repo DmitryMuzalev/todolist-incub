@@ -34,6 +34,7 @@ function App() {
 
   const [tasks, setTasks] = useState<TasksStateType>(defaultTasks);
 
+  //_Task:
   const removeTask = (todoListId: string, taskId: string) => {
     setTasks({
       ...tasks,
@@ -49,13 +50,6 @@ function App() {
     };
 
     setTasks({ ...tasks, [todoListId]: [newTask, ...tasks[todoListId]] });
-  };
-
-  const changeFilter = (todoListId: string, filter: FilterType) => {
-    const newTodoLists = todoLists.map((tl) =>
-      tl.id === todoListId ? { ...tl, filter } : tl
-    );
-    setTodoLists(newTodoLists);
   };
 
   const changeTaskStatus = (todoListId: string, taskId: string) => {
@@ -80,6 +74,7 @@ function App() {
     });
   };
 
+  //_Todo:
   const addTodoList = (title: string) => {
     const newTodoListId = v1();
     const newTodoList: TodoListType = {
@@ -107,6 +102,13 @@ function App() {
         return todo;
       }
     });
+    setTodoLists(newTodoLists);
+  };
+
+  const changeFilter = (todoListId: string, filter: FilterType) => {
+    const newTodoLists = todoLists.map((tl) =>
+      tl.id === todoListId ? { ...tl, filter } : tl
+    );
     setTodoLists(newTodoLists);
   };
 
