@@ -30,14 +30,14 @@ beforeEach(() => {
 });
 
 test("array should be created for new todolist", () => {
-  const todolistId3 = v1();
   const endState = tasksReducer(
     startState,
-    createTodolistAC({ id: todolistId3, title: "New todolist" })
+    createTodolistAC({ title: "New todolist" })
   );
 
   const keys = Object.keys(endState);
   const newKey = keys.find((k) => k !== "todolistId1" && k !== "todolistId2");
+
   if (!newKey) {
     throw Error("New key should be added");
   }
@@ -49,7 +49,7 @@ test("array should be created for new todolist", () => {
 test("property with todolistId should be deleted", () => {
   const endState = tasksReducer(
     startState,
-    removeTodolistAC({ id: "todolistId2" })
+    removeTodolistAC({ todoId: "todolistId2" })
   );
 
   const keys = Object.keys(endState);

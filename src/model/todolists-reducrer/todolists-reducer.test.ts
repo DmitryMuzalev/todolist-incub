@@ -25,21 +25,20 @@ beforeEach(() => {
 
 test("correct todolist should be created", () => {
   const title = "New todolist";
-  const todolistId3 = v1();
-  const endState = todolistsReducer(
-    startState,
-    createTodolistAC({ id: todolistId3, title })
-  );
+
+  const action = createTodolistAC({ title });
+
+  const endState = todolistsReducer(startState, action);
 
   expect(endState.length).toBe(3);
   expect(endState[2].title).toBe(title);
-  expect(endState[2].id).toBe(todolistId3);
+  expect(endState[2].id).toBe(action.payload.todoId);
 });
 
 test("correct todolist should be deleted", () => {
   const endState = todolistsReducer(
     startState,
-    removeTodolistAC({ id: todolistId1 })
+    removeTodolistAC({ todoId: todolistId1 })
   );
 
   expect(endState.length).toBe(1);
@@ -50,7 +49,7 @@ test("correct todolist should change its title", () => {
   const title = "New title";
   const endState = todolistsReducer(
     startState,
-    changeTodolistTitleAC({ id: todolistId2, title })
+    changeTodolistTitleAC({ todoId: todolistId2, title })
   );
 
   expect(endState[0].title).toBe("What to learn");
@@ -61,7 +60,7 @@ test("correct todolist should change its filter", () => {
   const filter = "completed";
   const endState = todolistsReducer(
     startState,
-    changeTodolistFilterAC({ id: todolistId2, filter })
+    changeTodolistFilterAC({ todoId: todolistId2, filter })
   );
 
   expect(endState[0].filter).toBe("all");

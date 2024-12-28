@@ -15,57 +15,53 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
 
 type Props = {
-  todoListId: string;
+  todoId: string;
   title: string;
   tasks: TaskType[];
   filter: FilterType;
-  addTask: (todoListId: string, title: string) => void;
-  removeTask: (todoListId: string, taskId: string) => void;
-  changeFilter: (todoListId: string, filter: FilterType) => void;
-  changeTaskStatus: (todoListId: string, taskId: string) => void;
-  updateTaskTitle: (
-    newTitle: string,
-    todoListId: string,
-    taskId: string
-  ) => void;
-  removeTodoList: (todoListId: string) => void;
-  updateTodoTitle: (newTitle: string, todoListId: string) => void;
+  addTask: (todoId: string, title: string) => void;
+  removeTask: (todoId: string, taskId: string) => void;
+  changeTodoFilter: (todoId: string, filter: FilterType) => void;
+  changeTaskStatus: (todoId: string, taskId: string) => void;
+  updateTaskTitle: (title: string, todoId: string, taskId: string) => void;
+  removeTodoList: (todoId: string) => void;
+  changeTodoTitle: (title: string, todoId: string) => void;
 };
 
 const TodoList: FC<Props> = ({
-  todoListId,
+  todoId,
   title,
   tasks,
   filter,
   addTask,
   removeTask,
-  changeFilter,
+  changeTodoFilter,
   changeTaskStatus,
   updateTaskTitle,
   removeTodoList,
-  updateTodoTitle,
+  changeTodoTitle,
 }) => {
   const addTaskHandler = (title: string) => {
-    addTask(todoListId, title);
+    addTask(todoId, title);
   };
 
-  const removeTaskHandler = (taskId: string) => removeTask(todoListId, taskId);
+  const removeTaskHandler = (taskId: string) => removeTask(todoId, taskId);
 
   const changeFilterHandler = (filter: FilterType) =>
-    changeFilter(todoListId, filter);
+    changeTodoFilter(todoId, filter);
 
   const changeTaskStatusHandler = (taskId: string) =>
-    changeTaskStatus(todoListId, taskId);
+    changeTaskStatus(todoId, taskId);
 
-  const updateTaskTitleHandler = (newTitle: string, taskId: string) =>
-    updateTaskTitle(newTitle, todoListId, taskId);
+  const updateTaskTitleHandler = (title: string, taskId: string) =>
+    updateTaskTitle(title, todoId, taskId);
 
   const removeTodoListHandler = () => {
-    removeTodoList(todoListId);
+    removeTodoList(todoId);
   };
 
-  const updateTodoTitleHandler = (newTitle: string) => {
-    updateTodoTitle(newTitle, todoListId);
+  const changeTodoTitleHandler = (title: string) => {
+    changeTodoTitle(title, todoId);
   };
 
   return (
@@ -87,7 +83,7 @@ const TodoList: FC<Props> = ({
         className={"todolist-title-container"}
       >
         <h3>
-          <EditableSpan value={title} onChange={updateTodoTitleHandler} />
+          <EditableSpan value={title} onChange={changeTodoTitleHandler} />
         </h3>
         <IconButton
           aria-label="delete"
@@ -131,8 +127,8 @@ const TodoList: FC<Props> = ({
                     />
                     <EditableSpan
                       value={task.title}
-                      onChange={(newTitle) =>
-                        updateTaskTitleHandler(newTitle, task.id)
+                      onChange={(title) =>
+                        updateTaskTitleHandler(title, task.id)
                       }
                     />
                     <IconButton

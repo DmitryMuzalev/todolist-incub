@@ -1,3 +1,4 @@
+import { v1 } from "uuid";
 import { FilterType, TodoListType } from "../../types";
 
 export type CreateTodolistAction = ReturnType<typeof createTodolistAC>;
@@ -20,9 +21,9 @@ export const todolistsReducer = (
 
   switch (type) {
     case "ADD_TODO": {
-      const { id, title } = payload;
+      const { todoId, title } = payload;
       const newTodoList: TodoListType = {
-        id,
+        id: todoId,
         title,
         filter: "all",
       };
@@ -31,18 +32,20 @@ export const todolistsReducer = (
     }
 
     case "REMOVE_TODO": {
-      const { id } = payload;
-      return state.filter((tl) => tl.id !== id);
+      const { todoId } = payload;
+      return state.filter((tl) => tl.id !== todoId);
     }
 
     case "CHANGE_TODO_TITLE": {
-      const { id, title } = payload;
-      return state.map((todo) => (todo.id === id ? { ...todo, title } : todo));
+      const { todoId, title } = payload;
+      return state.map((todo) =>
+        todo.id === todoId ? { ...todo, title } : todo
+      );
     }
 
     case "CHANGE_TODO_FILTER": {
-      const { id, filter } = payload;
-      return state.map((tl) => (tl.id === id ? { ...tl, filter } : tl));
+      const { todoId, filter } = payload;
+      return state.map((tl) => (tl.id === todoId ? { ...tl, filter } : tl));
     }
 
     default:
@@ -53,26 +56,27 @@ export const todolistsReducer = (
 //_Action creators:
 
 //_Create todo:
-export const createTodolistAC = (payload: { id: string; title: string }) => {
+export const createTodolistAC = ({ title }: { title: string }) => {
+  const payload = { todoId: v1(), title };
   return { type: "ADD_TODO", payload } as const;
 };
 
 //_Remove todo:
-export const removeTodolistAC = (payload: { id: string }) => {
+export const removeTodolistAC = (payload: { todoId: string }) => {
   return { type: "REMOVE_TODO", payload } as const;
 };
 
 //_Change todo title:
 export const changeTodolistTitleAC = (payload: {
   title: string;
-  id: string;
+  todoId: string;
 }) => {
   return { type: "CHANGE_TODO_TITLE", payload } as const;
 };
 
 //_Change todo title:
 export const changeTodolistFilterAC = (payload: {
-  id: string;
+  todoId: string;
   filter: FilterType;
 }) => {
   return { type: "CHANGE_TODO_FILTER", payload } as const;
