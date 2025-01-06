@@ -12,9 +12,11 @@ type Actions =
   | ChangeTodolistTitleAction
   | ChangeTodolistFilterAction;
 
+const initialState: TodoListType[] = [];
+
 //_Reducer:
 export const todolistsReducer = (
-  state: TodoListType[],
+  state: TodoListType[] = initialState,
   action: Actions
 ): TodoListType[] => {
   const { type, payload } = action;
@@ -56,7 +58,7 @@ export const todolistsReducer = (
 //_Action creators:
 
 //_Create todo:
-export const createTodolistAC = ({ title }: { title: string }) => {
+export const createTodolistAC = (title: string) => {
   const payload = { todoId: v1(), title };
   return { type: "ADD_TODO", payload } as const;
 };

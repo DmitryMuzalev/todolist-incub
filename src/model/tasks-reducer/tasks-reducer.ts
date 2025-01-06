@@ -18,7 +18,12 @@ type Actions =
   | ChangeTaskTitleAction
   | ChangeTaskStatusACAction;
 
-export const tasksReducer = (state: TasksStateType, action: Actions) => {
+const initialState: TasksStateType = {};
+
+export const tasksReducer = (
+  state: TasksStateType = initialState,
+  action: Actions
+) => {
   const { type, payload } = action;
   switch (type) {
     case "ADD_TODO": {

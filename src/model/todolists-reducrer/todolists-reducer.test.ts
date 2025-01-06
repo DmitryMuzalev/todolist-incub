@@ -26,7 +26,7 @@ beforeEach(() => {
 test("correct todolist should be created", () => {
   const title = "New todolist";
 
-  const action = createTodolistAC({ title });
+  const action = createTodolistAC(title);
 
   const endState = todolistsReducer(startState, action);
 
